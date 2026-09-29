@@ -1,7 +1,8 @@
 node_modules/
 !tv-service/node_modules/
 build/
-release/
+release/*
+!release/*.ipk
 .DS_Store
 vtv-sleep-prototype.zip
 
