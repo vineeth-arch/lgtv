@@ -51,3 +51,26 @@ If "📺 TV Timer" does not show up automatically (it can take a minute after in
 5. Tap **Done**. Add it to the Home Screen as above if you want.
 
 For a fixed custom time (say 75 minutes), use the **Set TV Sleep Timer** action instead of the menu and type the minutes.
+
+## From the Mac (works today, no Apple Developer account)
+
+`vtvctl` talks to the TV directly, like the iPhone app would. After the one-time pair (`scripts/vtvctl.sh pair --host <TV_IP>`, accept the prompt on the TV):
+
+```bash
+scripts/vtvctl.sh timer 30     # TV off in 30 min
+scripts/vtvctl.sh cancel       # cancel the timer
+scripts/vtvctl.sh off          # TV off now
+```
+
+Optional shell aliases (add to `~/.zshrc`, adjust the path):
+
+```bash
+alias tv30='"/Users/vineethnair/Vibe Code/LGTV/scripts/vtvctl.sh" timer 30'
+alias tvoff='"/Users/vineethnair/Vibe Code/LGTV/scripts/vtvctl.sh" off'
+```
+
+The Mac is only the sender: once the command returns, the TV owns the timer. Sending takes about 10 s and briefly shows V/TV on the TV screen.
+
+## iPhone without the iOS app (not set up)
+
+An iPhone Shortcut can use "Run Script over SSH" to run `luna-send-pub` on the TV over the developer SSH port (9922). This needs a dedicated SSH key added to `/media/developer/.ssh/authorized_keys` on the TV, which gives the phone a permanent developer shell while Developer Mode is on. It was **not** enabled: the key install was declined during development. If you want it, generate a key on a trusted machine, append the public key to that file with `ares-novacom --device tv --run`, and import the private key into the Shortcut. Test with `luna-send-pub -i -w 15000 -f luna://com.designinnsaeit.vtvsleep.service/status "{}"`.
