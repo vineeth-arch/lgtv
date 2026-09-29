@@ -17,7 +17,9 @@ function createHandlers(deps) {
   const power = deps.power;
   const now = deps.now;
   const sleep = deps.sleep;
-  const ring = [];
+  // Keep history across service restarts (the service idle-exits between calls).
+  let ring = [];
+  try { const old = state.read(LOG_FILE); if (Array.isArray(old)) ring = old.slice(-LOG_MAX); } catch (e) { /* start empty */ }
 
   function log(event, data) {
     ring.push({ t: new Date(now()).toISOString(), event: event, data: data === undefined ? null : data });

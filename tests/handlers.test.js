@@ -233,3 +233,12 @@ test('capabilityTest never calls a power-off method', async () => {
   assert.equal(luna.count('/power/turnOff'), 0);
   assert.equal(luna.count('/machineOff'), 0);
 });
+
+test('log history survives a service restart (new handlers on the same state)', async () => {
+  const first = build();
+  await first.handlers.schedule({ minutes: 30 });
+  const second = build(undefined, { state: first.state });
+  await second.handlers.cancel();
+  const events = (await second.handlers.diagnostics()).log.map((e) => e.event);
+  assert.deepEqual(events.slice(0, 2), ['scheduled', 'cancelled']);
+});
