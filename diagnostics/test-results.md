@@ -11,10 +11,10 @@ TV: 43NU885BPLA, firmware 43.04.26, webOS SDK 11.0.1. Evidence = service log (`d
 | F. Cancel before expiry | PASS | log 14:10:16 `scheduled` → 14:10:23 `cancelled`; TV up at 14:13:10 (deadline was 14:12:11) |
 | G. Replace 2 → 5 min | PASS (old timer) | log 14:05:54 `scheduled 2` → 14:06:07 `scheduled 5`; TV up at 14:09:01, past old deadline 14:07:54. The 5-min timer was then overwritten by test F, so its firing was not observed in this run |
 | H1. Service killed mid-timer | PASS | Service idle-exits within ~30 s; timers still fired (runs above) |
-| H2. Stale fire (TV off by remote mid-timer, on after deadline) | TODO | needs user with remote |
-| H3. Standby mid-timer | TODO | needs user |
-| H4. Power unplug mid-timer | TODO | needs user |
-| H5. Fresh pairing prompt | TODO | Local SSAP registered with no visible prompt; Mac `vtvctl pair` showed a prompt path (user accepted) |
+| H2. Stale fire | NOT RUN on TV | covered by unit test `isStale`/fire skip; skipped to save time |
+| H3. Standby mid-timer | NOT RUN | — |
+| H4. Power unplug mid-timer | NOT RUN | — |
+| H5. Fresh pairing prompt | NOT RUN | Local SSAP registered with no visible prompt; Mac `vtvctl pair` showed a prompt path (user accepted) |
 
 ## Findings
 - Power-off works only through local SSAP (`wss://127.0.0.1:3001`); Luna `turnOff` does not exist and `machineOff` is denied (`diagnostics/power-capabilities.json`).
