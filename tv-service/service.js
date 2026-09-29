@@ -34,10 +34,19 @@ const handlers = createHandlers({
   sleep: (ms) => new Promise((r) => setTimeout(r, ms)) // short retry pause only; the timer itself is an Activity
 });
 
+// Responses must be JSON-safe: a raw Error/socket inside a result would make respond() throw and the caller hangs.
+function safe(r) {
+  try {
+    return JSON.parse(JSON.stringify(r, (k, v) => (v instanceof Error ? { message: v.message, code: v.code } : v)));
+  } catch (e) {
+    return { returnValue: false, errorText: 'unserializable response: ' + String(e && e.message ? e.message : e) };
+  }
+}
+
 ['schedule', 'cancel', 'status', 'fire', 'warn', 'powerOff', 'diagnostics', 'capabilityTest', 'pairLocal'].forEach((name) => {
   service.register(name, (msg) => {
     handlers[name](msg.payload || {}).then(
-      (r) => msg.respond(r),
+      (r) => msg.respond(safe(r)),
       (e) => msg.respond({ returnValue: false, errorText: String(e && e.message ? e.message : e) }));
   });
 });
@@ -45,6 +54,6 @@ const handlers = createHandlers({
 // handleLaunch is reached from the TV app (bridge) with the app's launch params in `params`.
 service.register('handleLaunch', (msg) => {
   handlers.handleLaunch((msg.payload || {}).params).then(
-    (r) => msg.respond(r),
+    (r) => msg.respond(safe(r)),
     (e) => msg.respond({ returnValue: false, errorText: String(e && e.message ? e.message : e) }));
 });

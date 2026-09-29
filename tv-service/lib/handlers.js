@@ -107,7 +107,7 @@ function createHandlers(deps) {
 
   function powerOff() {
     return powerOffWithRetry().then((r) => {
-      log('power-off', { ok: r.ok, attempts: r.attempts.length });
+      log('power-off', { ok: r.ok, attempts: r.attempts.length, methods: [].concat.apply([], r.attempts).map((x) => ({ m: x.method, ok: x.ok, code: x.errorCode || null, text: x.errorText || null })) });
       return { returnValue: r.ok, attempts: r.attempts, errorText: r.ok ? undefined : 'all power-off methods failed' };
     });
   }
@@ -168,7 +168,7 @@ function createHandlers(deps) {
       probe('ssap.connect', () => ssap.probe())
     ];
     return Promise.all(probes).then((results) => {
-      log('capabilityTest', results.map((r) => r.probe + ':' + r.ok));
+      log('capabilityTest', results.map((r) => r.probe + ':' + r.ok + (r.ok ? '' : ':' + r.errorCode + ':' + r.errorText)));
       return { returnValue: true, at: new Date(t).toISOString(), node: process.version, results: results };
     });
   }

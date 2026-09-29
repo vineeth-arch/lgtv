@@ -1,0 +1,80 @@
+{
+    "returnValue": true,
+    "results": [
+        {
+            "errorCode": null,
+            "errorText": null,
+            "ok": true,
+            "probe": "activitymanager.create",
+            "raw": {
+                "subscribed": false,
+                "returnValue": true,
+                "activityId": 127
+            }
+        },
+        {
+            "errorCode": null,
+            "errorText": null,
+            "ok": true,
+            "probe": "activitymanager.cancel",
+            "raw": {
+                "returnValue": true
+            }
+        },
+        {
+            "errorCode": null,
+            "errorText": null,
+            "ok": true,
+            "probe": "notification.createToast",
+            "raw": {
+                "returnValue": true,
+                "toastId": "com.designinnsaeit.vtvsleep.service-1790688046922"
+            }
+        },
+        {
+            "errorCode": -1,
+            "errorText": "Denied method call \"getPowerState\" for category \"/power\"",
+            "ok": false,
+            "probe": "tvpower.getPowerState",
+            "raw": {
+                "errorCode": -1,
+                "returnValue": false,
+                "errorText": "Denied method call \"getPowerState\" for category \"/power\""
+            }
+        },
+        {
+            "errorCode": null,
+            "errorText": null,
+            "ok": true,
+            "probe": "systemproperty.getSystemInfo",
+            "raw": {
+                "returnValue": true,
+                "firmwareVersion": "43.04.26",
+                "modelName": "43NU885BPLA.DTRDLJL",
+                "sdkVersion": "11.0.1"
+            }
+        },
+        {
+            "errorCode": null,
+            "errorText": null,
+            "ok": true,
+            "probe": "state.dir",
+            "raw": {
+                "returnValue": true,
+                "dir": "/media/developer/apps/usr/palm/services/com.designinnsaeit.vtvsleep.service/data"
+            }
+        },
+        {
+            "errorCode": null,
+            "errorText": null,
+            "ok": true,
+            "probe": "ssap.connect",
+            "raw": {
+                "keyPresent": true,
+                "returnValue": true
+            }
+        }
+    ],
+    "at": "2026-09-29T13:20:46.631Z",
+    "node": "v20.12.2"
+}
