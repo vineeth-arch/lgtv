@@ -1,0 +1,72 @@
+{
+  "device": {
+    "model": "43NU885BPLA.DTRDLJL",
+    "firmware": "43.04.26",
+    "sdk": "11.0.1",
+    "otaId": "HE_DTV_W26N_AFADATAA",
+    "nodeOnTv": "v20.12.2"
+  },
+  "testedAt": "2026-09-29T13:26:25Z",
+  "gates": {
+    "G1_activity_manager": "PASS - scheduled activity (persist, UTC start) fired service.fire ~2 min later with app closed",
+    "G2_power_off": "PASS - local SSAP turnOff from the TV-side service put the TV in standby",
+    "G3_state": "PASS - state/log/client-key persisted in service data dir (/media/developer/apps/.../data)"
+  },
+  "methods": [
+    {
+      "method": "Luna tvpower/power/turnOff",
+      "available": false,
+      "permission": "n/a",
+      "tested": true,
+      "errorCode": -1,
+      "errorText": "Unknown method \"turnOff\" for category \"/power\""
+    },
+    {
+      "method": "Luna sleep/shutdown/machineOff",
+      "available": true,
+      "permission": "DENIED",
+      "tested": true,
+      "errorCode": -1,
+      "errorText": "Denied method call \"machineOff\" for category \"/shutdown\""
+    },
+    {
+      "method": "Luna tvpower/power/getPowerState",
+      "available": true,
+      "permission": "DENIED",
+      "tested": true,
+      "errorCode": -1,
+      "errorText": "Denied method call \"getPowerState\" for category \"/power\""
+    },
+    {
+      "method": "Luna activitymanager/list",
+      "available": true,
+      "permission": "DENIED (not needed)",
+      "tested": true,
+      "errorCode": -1,
+      "errorText": "Denied method call \"list\" for category \"/\""
+    },
+    {
+      "method": "Luna activitymanager create/cancel/complete",
+      "available": true,
+      "permission": "granted via requiredPermissions activity.operation",
+      "tested": true
+    },
+    {
+      "method": "Luna notification/createToast",
+      "available": true,
+      "permission": "granted",
+      "tested": true
+    },
+    {
+      "method": "Local SSAP wss://127.0.0.1:3001 ssap://system/turnOff",
+      "available": true,
+      "permission": "registered without a prompt (client key saved)",
+      "tested": true,
+      "result": "TV powered off; logged ok on first attempt"
+    }
+  ],
+  "evidence": [
+    "diagnostics/fire-log.json",
+    "diagnostics/capability-test-service.json"
+  ]
+}
