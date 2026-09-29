@@ -15,7 +15,7 @@ public struct TVRemote: Sendable {
     /// Apps we never switch back to after launching V/TV.
     private static let skipRestore: Set<String> = [TimerCommand.appID, "com.webos.app.home", "com.webos.app.livetv-launcher-shim", ""]
 
-    public init(host: String, store: CredentialStore, settle: TimeInterval = 1.5) {
+    public init(host: String, store: CredentialStore, settle: TimeInterval = 7.0) {
         self.host = host
         self.store = store
         self.settle = settle
