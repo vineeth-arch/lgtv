@@ -1,5 +1,5 @@
 {
-  "id": "com.vineeth.vtvsleep.service",
-  "description": "Persistent LG TV sleep scheduler",
-  "services": [{"name":"com.vineeth.vtvsleep.service"}]
+  "id": "com.designinnsaeit.vtvsleep.service",
+  "description": "V/TV Sleep timer service",
+  "services": [{ "name": "com.designinnsaeit.vtvsleep.service" }]
 }
