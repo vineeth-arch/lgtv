@@ -7,3 +7,7 @@ release/*
 vtv-sleep-prototype.zip
 
 ios/VTVCore/.build
+*.xcodeproj
+DerivedData/
+*.xcarchive
+ios/VTVRemote/VTVRemote/Info.plist

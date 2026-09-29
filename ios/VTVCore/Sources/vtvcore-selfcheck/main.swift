@@ -74,5 +74,20 @@ do {
 } catch { check(false, "file store: \(error)") }
 try? FileManager.default.removeItem(at: dir)
 
+// Dialog text
+check(Dialog.timerSet(minutes: 30, offAt: TimerCommand.offAt(from: base, minutes: 30), timeZone: utc) == "LG TV sleep timer set for 30 minutes. TV will turn off at 10:43 PM.", "dialog timer set")
+check(Dialog.timerSet(minutes: 1, offAt: base, timeZone: utc).contains("for 1 minute."), "dialog singular minute")
+check(Dialog.failure(VTVError.notPaired).contains("Tap Pair") || Dialog.failure(VTVError.notPaired).contains("tap Pair"), "dialog not paired")
+check(Dialog.failure(VTVError.unreachable).contains("not reachable"), "dialog unreachable")
+
+// TVActions host resolution + pairing flag (no network)
+let mem = InMemoryCredentialStore(Credentials(host: "10.0.0.2", clientKey: "k"))
+check(TVActions(store: mem).isPaired(), "actions paired for saved host")
+check(!TVActions(store: mem, host: "10.0.0.9").isPaired(), "actions not paired for other host")
+do { _ = try await TVActions(store: InMemoryCredentialStore()).setTimer(minutes: 30); check(false, "no host must fail") }
+catch { check(error as? VTVError == .hostMissing, "no host -> hostMissing") }
+do { _ = try await TVActions(store: mem).setTimer(minutes: 0); check(false, "0 min must fail") }
+catch { check(error as? VTVError == .invalidMinutes(0), "actions reject 0 minutes before connecting") }
+
 print("\(total - failures)/\(total) checks passed")
 exit(failures == 0 ? 0 : 1)
