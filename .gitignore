@@ -4,3 +4,5 @@ build/
 release/
 .DS_Store
 vtv-sleep-prototype.zip
+
+ios/VTVCore/.build
