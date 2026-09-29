@@ -1,0 +1,7 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>V/TV Sleep</title><script src="webOSTVjs-1.2.10/webOSTV.js"></script><style>body{font-family:sans-serif;background:#111;color:#fff;margin:0;padding:48px}h1{font-size:48px}button{font-size:28px;padding:20px 28px;margin:10px;border-radius:14px}.status{font-size:24px;margin-top:28px;white-space:pre-wrap}</style></head><body><h1>V/TV Sleep</h1><button onclick="arm(2)">Test 2 min</button><button onclick="arm(30)">30 min</button><button onclick="arm(60)">60 min</button><button onclick="cancelTimer()">Cancel</button><button onclick="testPower()">Power capability test</button><div id="status" class="status">Ready</div><script>
+const SERVICE='luna://com.vineeth.vtvsleep.service';
+function call(method, parameters={}){document.getElementById('status').textContent='Working…';webOS.service.request(SERVICE,{method,parameters,onSuccess:r=>document.getElementById('status').textContent=JSON.stringify(r,null,2),onFailure:e=>document.getElementById('status').textContent='ERROR\n'+JSON.stringify(e,null,2)});}
+function arm(minutes){call('arm',{minutes});}
+function cancelTimer(){call('cancel',{});}
+function testPower(){call('powerTest',{});}
+</script></body></html>

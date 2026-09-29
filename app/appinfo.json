@@ -1,0 +1,9 @@
+{
+  "id": "com.vineeth.vtvsleep",
+  "version": "0.1.0",
+  "vendor": "Vineeth",
+  "type": "web",
+  "main": "index.html",
+  "title": "V/TV Sleep",
+  "requiredACG": ["activity.operation"]
+}
