@@ -1,5 +1,9 @@
 {
-  "name": "com.vineeth.vtvsleep.service",
+  "name": "com.designinnsaeit.vtvsleep.service",
   "version": "0.1.0",
-  "main": "service.js"
+  "description": "V/TV Sleep TV-side service",
+  "main": "service.js",
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
 }
