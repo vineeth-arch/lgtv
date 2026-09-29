@@ -91,15 +91,15 @@ scripts/vtvctl.sh off
 ```
 The client key and the TV certificate pin are saved in `~/.config/vtv/tv.json` (mode 0600). `vtvctl pair --reset-pin` clears the pin if the TV's certificate legitimately changed.
 
-iPhone: open the iOS app, enter the TV's IP address, tap Pair, and accept the prompt on the TV. Allow Local Network access when iOS asks. The iOS app source is in `ios/`; it has not been run on a device from this repo's tests.
+iPhone: the planned iOS app pairs the same way as `vtvctl` (TV IP, then accept the prompt on the TV, and allow Local Network access when iOS asks). At the time of writing `ios/` contains only the shared `VTVCore` package that `vtvctl` uses; the iOS app itself is not in this repo yet and has never run on a device.
 
 ## iOS app and TestFlight
 
-The iOS app is built by GitHub Actions and distributed through TestFlight; see `docs/ios-ci.md` for the setup. This needs an Apple Developer account and an App Store Connect API key.
+The iOS app is planned to be built by GitHub Actions and distributed through TestFlight; see `docs/ios-ci.md` for the setup. This needs an Apple Developer account and an App Store Connect API key.
 
 ## Shortcuts and Siri
 
-Timers can be set from Shortcuts, the Home Screen, Control Center and Siri. See `docs/shortcuts.md`.
+Shortcuts, Home Screen, Control Center and Siri setup is described in `docs/shortcuts.md`; it depends on the iOS app.
 
 ## Troubleshooting
 
@@ -125,12 +125,12 @@ scripts/install-tv.sh
 scripts/uninstall-tv.sh                 # removes the app and service from the TV
 rm -rf ~/.config/vtv                    # Mac credentials and pin
 ```
-Delete the iOS app from the phone to remove its Keychain entries. Turn Developer Mode off in the TV's Developer Mode app if you no longer need it.
+Delete the iOS app from the phone, if installed, to remove its stored credentials. Turn Developer Mode off in the TV's Developer Mode app if you no longer need it.
 
 ## Security
 
 - LAN only. The phone talks to the TV over the local network; nothing goes to a cloud service. No telemetry.
-- The TV's client key is stored in the iOS Keychain on the phone and in a 0600 file for `vtvctl` on the Mac.
+- The TV's client key is stored in a 0600 file for `vtvctl` on the Mac. The iOS app is designed to keep it in the Keychain via the `CredentialStore` seam in `VTVCore`.
 - Timer minutes are validated as whole numbers from 1 to 720 and rejected, not clamped.
 - The SSAP registration manifest is unsigned, so the TV grants only the limited permission set it requests (`LAUNCH`, `CONTROL_POWER`, `READ_RUNNING_APPS`, `READ_APP_STATUS`, `READ_POWER_STATE`, `WRITE_NOTIFICATION_TOAST`).
 - The TV's self-signed TLS certificate is pinned (SHA-256 of the leaf certificate, trust on first use). A changed certificate fails with a re-pair message.
