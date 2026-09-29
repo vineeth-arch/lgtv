@@ -4,7 +4,7 @@
   "private": true,
   "description": "V/TV Sleep: TV-side sleep timer for LG webOS",
   "scripts": {
-    "test": "node --test tests/",
+    "test": "node --test \"tests/*.test.js\"",
     "build": "scripts/build-tv.sh"
   },
   "devDependencies": {
