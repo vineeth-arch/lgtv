@@ -1,0 +1,13 @@
+{
+  "name": "vtv-sleep",
+  "version": "0.1.0",
+  "private": true,
+  "description": "V/TV Sleep: TV-side sleep timer for LG webOS",
+  "scripts": {
+    "test": "node --test tests/",
+    "build": "scripts/build-tv.sh"
+  },
+  "devDependencies": {
+    "@webos-tools/cli": "^3.2.6"
+  }
+}
