@@ -225,3 +225,14 @@ H3 and H4 are "record behaviour" tests, not pass/fail. If H4 shows the timer is 
 - No `setTimeout` timers for the sleep timer itself; no keep-alive loops; no exploits or rooting.
 - Pause only for actions that need the user physically.
 - Commit after each step.
+
+## Finding: foreground launch interrupts the playing app (2026-09-29)
+
+Phone-style path (`vtvctl timer N` = SSAP launch of V/TV with params) works end to end: the TV service holds the timer and the TV turns itself off. Side effect: launching V/TV takes the foreground. With YouTube playing, YouTube is closed by the TV and reopens fresh (paused) afterwards. Restoring the app with a relaunch and calling `PalmSystem.deactivate()` from V/TV both give the same result, so the app cannot be preserved on this route.
+
+Settle delay after launch is 7 s: V/TV cold-starts in 3–4 s before it calls the service.
+
+Options if the interruption is unacceptable (not implemented):
+1. Test Netflix and HDMI inputs, which may behave better than YouTube.
+2. iPhone runs `luna-send-pub` over the TV's developer SSH (port 9922, key from the Key Server). No foreground app, but needs an SSH library in the iOS app and a dev key on the phone.
+3. Set the timer from the TV remote (V/TV opened directly) — unaffected.
