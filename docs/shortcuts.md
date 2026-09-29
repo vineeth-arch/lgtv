@@ -71,6 +71,8 @@ alias tvoff='"/Users/vineethnair/Vibe Code/LGTV/scripts/vtvctl.sh" off'
 
 The Mac is only the sender: once the command returns, the TV owns the timer. Sending takes about 10 s and briefly shows V/TV on the TV screen.
 
-## iPhone without the iOS app (not set up)
+## iPhone without the iOS app (not possible with a new key)
 
-An iPhone Shortcut can use "Run Script over SSH" to run `luna-send-pub` on the TV over the developer SSH port (9922). This needs a dedicated SSH key added to `/media/developer/.ssh/authorized_keys` on the TV, which gives the phone a permanent developer shell while Developer Mode is on. It was **not** enabled: the key install was declined during development. If you want it, generate a key on a trusted machine, append the public key to that file with `ares-novacom --device tv --run`, and import the private key into the Shortcut. Test with `luna-send-pub -i -w 15000 -f luna://com.designinnsaeit.vtvsleep.service/status "{}"`.
+An iPhone Shortcut could use "Run Script over SSH" to run `luna-send-pub` on the TV over the developer SSH port (9922). Adding a dedicated phone key does **not** work: on this TV (firmware 43.04.26) `/media/developer/.ssh/authorized_keys` is owned by another account and the `prisoner` login gets `Permission denied` when appending. Only the Key Server can issue access.
+
+The only remaining variant is copying the existing developer key (`~/.ssh/tv_webos`, protected by the Key Server passphrase) to the phone. That was **not tried**: it puts the TV's developer login on the phone, and whether the Shortcuts SSH action accepts that key is unverified. For a phone tap, use the iOS app (needs the paid Apple Developer Program, see `docs/ios-ci.md`).
