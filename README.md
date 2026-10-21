@@ -152,3 +152,7 @@ Delete the iOS app from the phone, if installed, to remove its stored credential
 ## Repository layout
 
 `tv-app/` TV UI, `tv-service/` timer service, `ios/VTVCore/` Swift package and `vtvctl`, `scripts/` tooling, `docs/` documentation (`PLAN.md` is the project log), `diagnostics/` on-TV evidence, `tests/` service unit tests (`npm test`), `release/` packaged release (`scripts/make-release.sh`).
+
+## Returning to the calling app (0.1.1)
+
+A launch with `{mode: 'schedule', minutes}` or `{mode: 'cancel'}` may also carry `returnTo: '<app id>'`. After the service answers and the confirmation overlay has been on screen for about 1.4 s, V/TV Sleep reopens that app with `params: {timer: {op, minutes, shutdownAt, at}}` (`op` is `schedule`, `cancel` or `error`). Only app ids in the fixed `RETURN_IDS` list in `tv-app/app.js` are honoured (currently `com.designinnsaeit.vhome`), because launch params can come from any paired LAN client. The app needs the `applications.operation` permission (added to `appinfo.json`). V/HOME uses this for its one-click timer.
