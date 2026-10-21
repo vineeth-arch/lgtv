@@ -1,6 +1,6 @@
 {
   "id": "com.designinnsaeit.vtvsleep",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "vendor": "Design Inn Saeit",
   "type": "web",
   "main": "index.html",
@@ -9,5 +9,5 @@
   "largeIcon": "largeIcon.png",
   "resolution": "1920x1080",
   "handlesRelaunch": true,
-  "requiredPermissions": ["activity.operation", "notification.operation"]
+  "requiredPermissions": ["activity.operation", "notification.operation", "applications.operation"]
 }

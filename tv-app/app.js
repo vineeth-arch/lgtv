@@ -3,6 +3,8 @@
   var SVC = 'luna://com.designinnsaeit.vtvsleep.service/';
   var AM = 'luna://com.palm.activitymanager/';
   var MIN_CUSTOM = 5, MAX_CUSTOM = 720, STEP = 5;
+  // Apps that may ask to be reopened after a timer request. Launch params come from any paired LAN client, so this is a fixed list.
+  var RETURN_IDS = ['com.designinnsaeit.vhome'], RETURN_MS = 1400;
   var POLL_MS = 30000, OVERLAY_MS = 4000, ENTRY_MS = 1500, DEV_TAPS = 5, DEV_WINDOW_MS = 3000;
 
   function $(id) { return document.getElementById(id); }
@@ -174,18 +176,30 @@
     lastLaunch = { key: key, at: now };
     closeDev();
     if (customOpen()) closeCustom();
+    var returnTo = (params.mode === 'schedule' || params.mode === 'cancel') && RETURN_IDS.indexOf(params.returnTo) !== -1 ? params.returnTo : null;
     call('handleLaunch', { params: params }, function (r) {
       refresh();
+      var report = null; // what the caller gets back: only what this service confirmed
       if (!r || !r.returnValue) {
-        showOverlay('error', (r && r.errorText) || 'Timer service not answering', '');
+        var err = (r && r.errorText) || 'Timer service not answering';
+        showOverlay('error', err, '');
+        report = { op: 'error', error: String(err).slice(0, 120) };
       } else if (params.mode === 'schedule') {
         showOverlay('ok', 'TV OFF IN ' + r.minutes + ' MIN', clockTime(r.shutdownAt));
+        report = { op: 'schedule', minutes: r.minutes, shutdownAt: r.shutdownAt };
       } else if (params.mode === 'cancel') {
         showOverlay('ok', 'TIMER CANCELLED', '');
+        report = { op: 'cancel' };
       } else if (params.mode === 'off') {
         showOverlay('ok', 'TV TURNING OFF', '');
       }
+      if (returnTo && report) setTimeout(function () { goBackTo(returnTo, report); }, RETURN_MS);
     });
+  }
+  // One-click flow: after the confirmation is on screen, reopen the app that asked and tell it what happened.
+  function goBackTo(id, report) {
+    report.at = Date.now();
+    window.VTVBridge.call('luna://com.webos.applicationManager/launch', { id: id, params: { timer: report } }, function () {});
   }
   function parseLaunch(raw) {
     if (!raw) return null;
