@@ -176,7 +176,7 @@
     lastLaunch = { key: key, at: now };
     closeDev();
     if (customOpen()) closeCustom();
-    var returnTo = (params.mode === 'schedule' || params.mode === 'cancel') && RETURN_IDS.indexOf(params.returnTo) !== -1 ? params.returnTo : null;
+    var returnTo = (params.mode === 'schedule' || params.mode === 'cancel' || params.mode === 'status') && RETURN_IDS.indexOf(params.returnTo) !== -1 ? params.returnTo : null;
     call('handleLaunch', { params: params }, function (r) {
       refresh();
       var report = null; // what the caller gets back: only what this service confirmed
@@ -192,6 +192,10 @@
         report = { op: 'cancel' };
       } else if (params.mode === 'off') {
         showOverlay('ok', 'TV TURNING OFF', '');
+      } else if (params.mode === 'status') {
+        if (r.scheduled) showOverlay('ok', 'TV OFF AT ' + clockTime(r.shutdownAt).toUpperCase(), 'Checking timer');
+        else showOverlay('ok', 'NO TIMER SET', 'Checking timer');
+        report = r.scheduled ? { op: 'status', scheduled: true, minutes: r.minutes, shutdownAt: r.shutdownAt } : { op: 'status', scheduled: false };
       }
       if (returnTo && report) setTimeout(function () { goBackTo(returnTo, report); }, RETURN_MS);
     });
